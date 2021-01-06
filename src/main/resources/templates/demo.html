@@ -1,0 +1,317 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="zh-cn">
+   
+<head>
+    
+    <meta charset="UTF-8">
+    <title></title>
+    <script src="js/jquery-3.5.1.min.js"></script>
+    <script type="text/javascript" src="js/bootstrap.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+   
+    <style>
+        label {
+            
+            line-height: 153px;
+            cursor: pointer;
+        }
+
+        #upload-tip {
+            border: 4px dashed #d9d9d9;
+            width: 135px;
+            height: 135px;
+            line-height: 135px;
+            cursor: pointer;
+            font-size: 50px;
+            color: #d9d9d9;
+        }
+
+        #img-show {
+            width: 135px;
+            height: 135px;
+            margin: 0 auto;
+            object-fit: cover;
+            box-shadow: 2px 10px 10px 2px rgba(149, 158, 159, 0.86);
+        }
+
+        #content {
+            position: relative;
+            width: 140px;
+            height: 50px;
+            margin: 0;
+            left: 70px;
+            top: 40%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+        }
+       
+    </style>
+    <script>
+        function imgfileChange() {
+            var upload_tip = document.getElementById("upload-tip");
+            var img_show = document.getElementById("img-show");
+            var imgfile = document.getElementById("imgfile");
+            var freader = new FileReader();
+            //开始读取指定的Blob中的内容。一旦完成，result属性中将包含一个data: URL格式的Base64字符串以表示所读取文件的内容。
+            freader.readAsDataURL(imgfile.files[0]);
+            /*       console.log(imgfile.files[0])*/
+            //处理load事件。该事件在读取操作完成时触发。
+            freader.onload = function (e) {
+                //  e.target.result;  就是data:image/jpeg;base64,+编码  就相当于直接解码
+                img_show.src = e.target.result;
+                /*console.log(e.target.result)*/
+                img_show.style.display = "block";
+                upload_tip.style.display = "none";
+            };
+        }
+    </script>
+</head>
+<body>
+    <div class="container-fluid">
+	    <div >
+            <div class="row" style="position: relative;width:100%;height: 400px;">
+                <div class="col-s-12">
+                    <div id="image"style="position: relative;width:100%;height: 300px;">
+                        <button type="button" name="button" @click="show">显示全部图片</button>
+                        <button type="button" name="button" @click="category">显示全部分类</button>
+                        <span v-for="category in categorys" style=" height: 50px;">
+                            <span><button type="button" @click="findbycategoryid(category.id)" style=" width: 30px;">{{category.name}}</button></span>
+                        </span>
+                        </br>
+                        <div v-for="image in images" style=" float: left;">
+                            <div ><image :src="image.url" mode="" style="width: 80px;height: 80px;"></image></br><button type="button" @click="del(image.id,image.categoryId)">删除</button><button type="button" @click="del(image.id,image.categoryId)">修改</button></div>
+                        </div>
+                    </div>
+                    <div id="category"style="position: relative;width:100%;height: 100px;">
+                        
+                    </div>
+                </div>
+            </div>
+            <div class="row" id="app" style="position: relative;width:100%;height: 300px;">
+                <div class="col-s-6">
+                    
+                        <div id="wrap">
+                            <div id="content">
+                                <li>单张图片上传</li>
+                                <label for="imgfile">
+                                    <div style="background-color: rgba(149, 158, 159, 0.86);">
+                                        <div id="upload-tip">+</div>
+                                        <img src="" alt="" id="img-show" style="display: none">
+                                        <input type="file" id="imgfile" ref="myFile" style="display: none" onchange="imgfileChange()">
+                                    </div>
+                                </label>
+                                <button type="button" @click="savePlaceInfo">提交</button>&emsp;
+                            </div>
+                        </div>
+                        
+                    
+                </div>
+                <div class="col-s-6">
+                    <div style="position: relative;left: 100px; width: 100px;height: 100px;">
+                        <span>选择图片类型</span>
+                        <p v-for="(item,index) in alpha " :key="index">
+                            <input type="radio" id="one" :value="item.value" v-model="picked" />
+                            <span for="item.text">{{item.text}}</span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            
+           <div class="row">
+                <div class="col-12">
+                    <div>
+                        <li>多张图片上传</li>
+                        <form action="http://localhost:8080/image/filesUpload" method="POST" name="xiangmu" id="xiangmu"
+                            enctype="multipart/form-data">
+                            <table>
+                                <tr>
+                                    <td>图片1上传：</td>
+                                    <td><input type=file name="myfiles" id="doc"
+                                        onchange="showImage();">
+                                    </td>
+                                    <div id="localImag">
+                                        <img id="preview" width=-1 height=-1 style="display:none" />
+                                    </div>
+                                </tr>
+                                <tr>
+                                    <td>图片2上传:</td>
+                                    
+                                    <td><input type="file" name="myfiles" id="doc1"></td>
+                                </tr>
+                                <tr>
+                                    <td>图片3上传:</td>
+                                    <td><input type="file" name="myfiles" id="doc1"></td>
+                                </tr>
+                                <tr>
+                                    <td>图片4上传:</td>
+                                    <td><input type="file" name="myfiles" id="doc1"></td>
+                                </tr>
+                                <tr>
+                                    <td><input type="submit" value="提交" />
+                                    </td>
+                                </tr>
+                            </table>
+                        </form>
+                    </div>
+                </div>
+           </div>
+            
+        </div>
+    </div>
+
+</body>
+</html>
+<script src="https://cdn.jsdelivr.net/npm/vue"></script>
+<script src="https://cdn.staticfile.org/vue/2.2.2/vue.min.js"></script>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+<script>
+
+    const app = new Vue({
+        el: "#app",
+        data: {
+
+        },
+        data () {
+            return {
+            picked: 'A',
+            alpha: [
+                { text: '风景', value: '1' },
+                { text: '美女', value: '2' },
+                { text: '汽车', value: '3' },
+                { text: '动漫', value: '4' },
+            ],
+            }
+        },
+        methods: {
+            savePlaceInfo() {//上传图片
+                alert(this.picked);
+                
+                console.log(this.place);
+                //查找到存放文件的元素。
+                let myFile = this.$refs.myFile;
+                //type 为 file 的 input 元素内部有一个 files数组，里边存放了所有选择的 file，由于文件上传时，文件可以多选，因此这里拿到的 files 对象是一个数组。
+                let files = myFile.files;
+                
+                //拿到编码之后的图片数据
+                //从 files对象中，获取自己要上传的文件，由于这里是单选，所以其实就是数组中的第一项。
+                let file = files[0];
+                if(file==null){
+                    alert("还未选择图片");
+                    return;
+                }
+                
+                let formData = new FormData();
+                formData.append("file", file);
+                formData.append("categoryId",this.picked);
+                //axios
+                axios({
+                    method: 'post',
+                    url: 'http://localhost:8080/image/add',
+                    data: formData,
+                    headers: { 'Content-Type': 'multipart/form-data' },
+                }).then((res) => {
+                    console.log(res.data);
+                });
+            },
+
+        }
+    })
+    var app2 = new Vue({
+    el:'#image',
+    data:{
+      images:[],
+      categorys:[]
+    },
+    methods:{
+      show:function(){//展示所有的图片
+		axios({
+                    method: 'get',
+                    url: 'http://localhost:8080/image/findall',
+                    
+                }).then((res) => {
+					this.images=res.data.data;
+
+                   
+                });
+         
+      },
+      category:function(){//查询出所有图片的分类
+		axios({
+                    method: 'get',
+                    url: 'http://localhost:8080/image/findCategory',
+                    
+                }).then((res) => {
+					this.categorys=res.data.data;
+                });
+         
+      },
+      findbycategoryid:function(id){//分类查询图片
+        
+		axios({
+                    method: 'get',
+                    url: 'http://localhost:8080/image/findbycategoryid?id='+id,
+                    
+                }).then((res) => {
+                   
+					this.images=res.data.data;
+                    
+                    
+                });
+         
+      },
+      del:function(id,categoryId){//根据id删除图片
+          
+         axios({
+                     method: 'get',
+                     url: 'http://localhost:8080/image/delete?id='+id,
+                     
+                 }).then((res) => {
+                     
+                     if(res.data.status==200){
+                        
+                         this.findbycategoryid(categoryId);
+                     }
+                     
+                 });
+       }
+    }
+  })
+ 
+
+</script>
+<script type="text/javascript">
+    function showImage() {
+        var docObj = document.getElementById("doc");
+        var imgObjPreview = document.getElementById("preview");
+        if (docObj.files && docObj.files[0]) {
+            //火狐下，直接设img属性  
+            imgObjPreview.style.display = 'block';
+            imgObjPreview.style.width = '100px';
+            imgObjPreview.style.height = '100px';
+            //imgObjPreview.src = docObj.files[0].getAsDataURL();  
+            //火狐7以上版本不能用上面的getAsDataURL()方式获取，需要一下方式  
+            imgObjPreview.src = window.URL.createObjectURL(docObj.files[0]);
+        } else {
+            //IE下，使用滤镜  
+            docObj.select();
+            var imgSrc = document.selection.createRange().text;
+            var localImagId = document.getElementById("localImag");
+            //必须设置初始大小  
+            localImagId.style.width = "250px";
+            localImagId.style.height = "200px";
+            //图片异常的捕捉，防止用户修改后缀来伪造图片 
+            try {
+                localImagId.style.filter = "progid:DXImageTransform.Microsoft.AlphaImageLoader(sizingMethod=scale)";
+                localImagId.filters
+                        .item("DXImageTransform.Microsoft.AlphaImageLoader").src = imgSrc;
+            } catch (e) {
+                alert("您上传的图片格式不正确，请重新选择!");
+                return false;
+            }
+            imgObjPreview.style.display = 'none';
+            document.selection.empty();
+        }
+        return true;
+    }
+</script>
