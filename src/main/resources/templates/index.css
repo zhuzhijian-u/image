@@ -1,0 +1,105 @@
+.test {
+    display: none;
+}
+
+
+#upload-tip {
+    width: 135px;
+    height: 135px;
+    cursor: pointer;
+    color: #ccc;
+    border-radius: 10px;
+    font-size: 40px;
+    line-height: 135px;
+    text-align: center;
+    border: 1px dashed #ccc;
+}
+
+.img-container {
+    display: flex;
+    flex-wrap: wrap;
+    width:  100%;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.btn-contariner {
+    width: 100%;
+    text-align: center;
+    padding: 20px 0;
+}
+.btn {
+    width: 250px;
+    border-radius: 4px;
+    color: #1890ff;
+    border: 1px solid #1890ff;
+    background-color: #fff;
+    line-height: 1.5;
+}
+.edit-btn {
+
+    width: 100px;
+}
+ul, li {
+    list-style: none;
+}
+.result-container {
+    display: flex;
+    /* justify-content: space-between; */
+    align-items: center;
+    flex-wrap: wrap;
+    
+}
+.select-container  {
+    text-align: center;
+}
+.select {
+    width:  200px;
+    margin: 10px;
+    border: 1px solid #ccc;
+    padding: 5px;
+    border-radius: 4px;
+
+}
+li {
+    width: 20%;
+    position: relative;
+    text-align: center;
+}
+.image-item {
+    border-radius: 4px;
+    height: 150px;
+    margin: 10px;
+    background-repeat: no-repeat;
+    background-size: 100%;
+    
+}
+.edit-icon {
+    color: #1890ff;
+    cursor: pointer;
+    padding-right: 10px;
+
+}
+
+#img-show {
+    width: 135px;
+    height: 135px;
+    margin: 0 auto;
+    object-fit: cover;
+    box-shadow: 2px 2px 2px 2px rgba(149, 158, 159, 0.86);
+}
+
+.icon {
+    position: absolute;
+    top: 0;
+    font-size: 18px;
+    color: #ccc;
+    right: 0;
+    width: 20px;
+    top: 5px;
+    right: 10px;
+}
+.name {
+    text-align: center;
+    color: #000;
+}
